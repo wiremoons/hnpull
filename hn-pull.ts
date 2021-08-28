@@ -1,11 +1,11 @@
-#!/usr/bin/env -S deno run --allow-net=hacker-news.firebaseio.com --location https://wiremoons.com/
+#!/usr/bin/env -S deno run --quiet --allow-net=hacker-news.firebaseio.com --location https://wiremoons.com/
 //
 // hn-pull.ts : monitor and pull the latest Hacker News stories.
 // Copyright (c) Simon Rowe (simon@wiremoons.com) 2021. License MIT.
 // GitHub repo: https://github.com/wiremoons/hn-pull
 //
 //  Run from the command line with Deno in path as command:
-//  deno run --allow-net=hacker-news.firebaseio.com --location https://wiremoons.com/ ./hn-pull.ts
+//  deno run --quiet --allow-net=hacker-news.firebaseio.com --location https://wiremoons.com/ ./hn-pull.ts
 //
 // Application TODO:
 // - offload output to a Worker?
@@ -154,7 +154,7 @@ function getLastId(): number {
 async function streamStory() {
   // check if a localStorage hnID exists from previous execution
   let id = getLastId();
-  console.log(`Retrieved localStorage ID: ${id}`);
+  console.log(`Retrieved localStorage HN ID: ${id}`);
 
   // current HN items ID
   const nowId = await getMaxID();
@@ -173,7 +173,7 @@ async function streamStory() {
     );
     if (
       confirm(
-        `Retrieve ALL ('y') - or - start with current newest ('n') [RECOMMENDED] ?`,
+        `Retrieve ALL anyway ('y')  OR  start with current newest ('n') [RECOMMENDED] ?`,
       )
     ) {
       console.log(`'${diffId}' HN items to be retrieved and processed...`);
