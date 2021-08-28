@@ -201,7 +201,7 @@ async function streamStory() {
   while (true) {
     const item = await getItemByID(id);
 
-    // If item does not exists check as may need to pause for 90 seconds
+    // If item does not exists or returns `undefined`...
     if (!item) {
       // check current `id` against max HN ID as might have a bad `null` record...
       if (id < (await getMaxID())) {
