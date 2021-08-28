@@ -201,8 +201,17 @@ async function streamStory() {
   while (true) {
     const item = await getItemByID(id);
 
-    // If item does not exists - pause for 90 seconds
+    // If item does not exists check as may need to pause for 90 seconds
     if (!item) {
+      // check current `id` against max HN ID as might have a bad `null` record...
+      if (id < (await getMaxID())) {
+        // skip a record and re-try as more exist...
+        id += 1;
+        console.log(
+          `\n      !! WARNING: skipping Hacker News ID: '${id}' !!\n`,
+        );
+        continue;
+      }
       // display the current time to show when last HN item was checked
       await Deno.stdout.write(
         encoder.encode(`Last check: ${(format(new Date(), "HH:mm"))}`),
@@ -226,8 +235,6 @@ async function streamStory() {
       const author = item.by ?? "unknown author";
       const hnURL = `https://news.ycombinator.com/item?id=${id}`;
       storyId += 1;
-      // save the latest 'id' used for a story to `localStorage`
-      setLastId(id);
 
       // print the story data to screen
       console.log(`
@@ -241,7 +248,9 @@ async function streamStory() {
       `);
     }
 
-    // increment `id` so next HN item can be checked
+    // save the latest 'id' checked to `localStorage`
+    setLastId(id);
+    // increment `id` so next possible HN item can be checked
     id += 1;
   }
 }
