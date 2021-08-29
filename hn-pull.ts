@@ -189,6 +189,7 @@ async function streamStory() {
 
   // set to track starting point and how many stories found
   const startId = id;
+  let skippedId = 0;
   let storyId = 0;
 
   // create a text encoder used for updates in check loop below
@@ -207,9 +208,7 @@ async function streamStory() {
       if (id < (await getMaxID())) {
         // skip a record and re-try as more exist...
         id += 1;
-        console.log(
-          `\n      !! WARNING: skipping Hacker News ID: '${id}' !!\n`,
-        );
+        skippedId += 1;
         continue;
       }
       // display the current time to show when last HN item was checked
@@ -243,8 +242,8 @@ async function streamStory() {
       Story URL:   ${item.url || "NONE"}
       Posted by:  '${author}' ${await getUserData(author)}
       Posted on:   ${getDisplayDateTime(item.time ?? Date.now())}.
-      Exec stats: '${storyId}' displayed [type: ${item.type ||
-        "UNKNOWN"}] with +${id - startId} items scanned.
+      Exec stats: '${storyId}' displayed. Omitted '${skippedId}'. '${id -
+        startId}' total scanned.
       `);
     }
 
