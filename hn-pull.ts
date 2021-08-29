@@ -12,6 +12,7 @@
 // - different output options:  text with colour / JSON / into SQlite / HTML
 // - add delay in request retrieval - so not to overload HN site on long pulls
 // - add version and help command line params and output options
+// - move all `fetch` requests to one function and wrap in `try/catch`
 //
 
 // modules imported
