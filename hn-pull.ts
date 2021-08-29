@@ -242,7 +242,7 @@ async function streamStory() {
       Story URL:   ${item.url || "NONE"}
       Posted by:  '${author}' ${await getUserData(author)}
       Posted on:   ${getDisplayDateTime(item.time ?? Date.now())}.
-      Exec stats: '${storyId}' displayed. Omitted '${skippedId}'. '${id -
+      Exec stats: '${storyId}' displayed. '${skippedId}' omitted . '${id -
         startId}' total scanned.
       `);
     }
