@@ -13,6 +13,8 @@
 // - add delay in request retrieval - so not to overload HN site on long pulls
 // - add version and help command line params and output options
 // - move all `fetch` requests to one function and wrap in `try/catch`
+// - catch error for '--target' when compiled as not supported yet
+//
 //
 
 // modules imported
@@ -258,4 +260,6 @@ async function streamStory() {
 //--------------------------------
 // MAIN
 //--------------------------------
-await streamStory();
+if (import.meta.main) {
+  await streamStory();
+}
