@@ -46,25 +46,23 @@ function isNumber(arg: any): arg is number {
 
 /** Convert epoch date to date and time for display in output as a string */
 function getDisplayDateTime(epochTime: number): string {
-  //console.log(`Epoch date for conversion: ${launchData.dateEpoch}`);
-  var dateUTC: Date;
-  isNumber(epochTime) ? epochTime : parseInt(epochTime);
-  if (epochTime) {
+  //console.log(`Epoch time for conversion to data and time: ${epochTime}`);
+  let dateUTC: Date;
+  if (isNumber(epochTime)) {
     dateUTC = new Date(epochTime * 1000);
     //console.log(`Converted date to UTC format: ${dateUTC}`);
     return toIMF(new Date(dateUTC));
-    //console.log(`Final format: ${toIMF(new Date(dateUTC))}`);
+    //console.log(`Final data and time format: ${toIMF(new Date(dateUTC))}`);
   } else {
     return "UNKNOWN";
   }
 }
 
-/** Convert epoch date to date (no time) for display in output as a string */
+/** Convert an epoch time to a formatted date (no time) for display in output as a string */
 function getDisplayDate(epochTime: number): string {
-  //console.log(`Epoch date for conversion: ${launchData.dateEpoch}`);
-  var dateUTC: Date;
-  isNumber(epochTime) ? epochTime : parseInt(epochTime);
-  if (epochTime) {
+  //console.log(`Epoch time for conversion to a date: ${epochTime}`);
+  let dateUTC: Date;
+  if (isNumber(epochTime)) {
     dateUTC = new Date(epochTime * 1000);
     //console.log(`Converted date to UTC format: ${dateUTC}`);
     //return date only using `formatString`
@@ -103,8 +101,7 @@ interface Item {
 async function getMaxID(): Promise<number> {
   const endpoint = `${baseURL}/maxitem.json`;
   const res = await fetch(endpoint);
-  const id = await res.json();
-  return id;
+  return await res.json();
 }
 
 /** Obtain HN article for the given article ID */
