@@ -1,21 +1,32 @@
 #!/usr/bin/env -S deno run --quiet --allow-net=hacker-news.firebaseio.com --location https://wiremoons.com/
-//
-// hn-pull.ts : monitor and pull the latest Hacker News stories.
-// Copyright (c) Simon Rowe (simon@wiremoons.com) 2021. License MIT.
-// GitHub repo: https://github.com/wiremoons/hn-pull
-//
-//  Run from the command line with Deno in path as command:
-//  deno run --quiet --allow-net=hacker-news.firebaseio.com --location https://wiremoons.com/ ./hn-pull.ts
-//
-// Application TODO:
-// - offload output to a Worker?
-// - different output options:  text with colour / JSON / into SQlite / HTML
-// - add delay in request retrieval - so not to overload HN site on long pulls
-// - add version and help command line params and output options
-// - move all `fetch` requests to one function and wrap in `try/catch`
-// - catch error for '--target' when compiled as not supported yet
-//
-//
+/**
+ * @file hn-pull.ts
+ * @brief Monitor and pull the latest Hacker News stories.
+ *
+ * @author     simon rowe <simon@wiremoons.com>
+ * @license    open-source released under "MIT License"
+ * @source     https://github.com/wiremoons/hn-pull
+ *
+ * @date originally created: 24 Aug 2021
+ * @date updated significantly: 31 Aug 2021
+ *
+ * @details Program uses the Hacker News (HN) Application Programming Interface (API) to monitor for newly posted
+ * Hacker News stories. The API can be found here: https://github.com/HackerNews/API
+ * Application is written in TypeScript for use with the Deno runtime: https://deno.land/
+ *
+ * @note The program can be run with Deno using the command:
+ * @code deno run --quiet --allow-net=hacker-news.firebaseio.com --location https://wiremoons.com/ ./hn-pull.ts
+ */
+
+/**
+ * @note The following application enhancements are anticipated:
+ * @todo offload output to a Worker?
+ * @todo different output options:  text with colour / JSON / into SQlite / HTML
+ * @todo add delay in request retrieval so not to overload HN site on long pulls
+ * @todo add version and help command line params and output options
+ * @todo move all `fetch` requests to one function and wrap in `try/catch`
+ * @todo catch error for '--target' when compiled as not supported yet
+ */
 
 // modules imported
 import { delay } from "https://deno.land/std@0.106.0/async/delay.ts";
@@ -96,16 +107,25 @@ interface Item {
   readonly parts?: number[];
 }
 
-/** Maximum ID is the newest published item: retrieve the number via this function */
+/** Obtain the maximum Hacker News item ID
+ * @description Request the newest published Hacker News item ID retrieved from the Hacker Mews API call.
+ * @code https://hacker-news.firebaseio.com/v0/maxitem.json
+ * @return number : the retrieved HN item or `-1` if unable to parse as an integer (ie NaN)
+ */
 // https://hacker-news.firebaseio.com/v0/maxitem.json <- returns a number
 async function getMaxID(): Promise<number> {
   const endpoint = `${baseURL}/maxitem.json`;
   const res = await fetch(endpoint);
-  return await res.json();
+  const item = await res.json();
+  return (parseInt(item)) || -1;
 }
 
-/** Obtain HN article for the given article ID */
-// https://hacker-news.firebaseio.com/v0/item/<ID>.json <- returns new article for 'ID'
+/** Obtain Hacker News article for the given article ID
+ *  @description Returns the requested Hacker News article as an `Item` for the provided HN 'ID'
+ *  @code https://hacker-news.firebaseio.com/v0/item/<ID>.json
+ *  @param id : number - the number of the Hacker News article to request from the HN API
+ *  @return Item | undefined - copy or the `Item` interface record from the HN API or `undefined`
+ */
 async function getItemByID(id: number): Promise<Item | undefined> {
   const endpoint = `${baseURL}/item/${id}.json`;
   const res = await fetch(endpoint);
@@ -128,10 +148,14 @@ async function getUserData(userID: string): Promise<string> {
   }
 }
 
-/** Store last Hacker News story ID on `localStorage` */
+/** Store last Hacker News story ID on `localStorage`
+ * @description Attempts to write the provided Hacker News item ID into `localStorage` using `Storage.setItem`.
+ * @param hnID : number - Hacker News items ID to be stored against key `hnIdKey`
+ * @return boolean - `true` param passed is greater than `0` and its store was attempted
+ * */
 // https://deno.land/x/config_dir@v0.1.1/mod.ts  <- alternative approach
 function setLastId(hnID: number): boolean {
-  if (isNumber(hnID)) {
+  if (isNumber(hnID) && hnID >= 0) {
     localStorage.setItem("hnIdKey", `${hnID}`);
     return true;
   }
@@ -144,9 +168,19 @@ function setLastId(hnID: number): boolean {
  */
 // https://deno.land/x/config_dir@v0.1.1/mod.ts <- alternative approach
 function getLastId(): number {
-  if (localStorage.length > 0) {
-    return parseInt(localStorage.getItem("hnIdKey") ?? "-1");
+  try {
+    if (localStorage.length > 0) {
+      return parseInt(localStorage.getItem("hnIdKey") ?? "-1");
+    }
+  } catch (err) {
+    console.error(`\nERROR: trying to retrieved HN ID failed with: '${err}'\n`);
+    console.error(
+      "Access to 'localStorage' is required by specifying  '--location https://wiremoons.com/' \ " +
+        "as a command line flag when running the program. Exit.\n",
+    );
+    Deno.exit(1);
   }
+
   return -1;
 }
 
@@ -159,8 +193,9 @@ async function streamStory() {
   // current HN items ID
   const nowId = await getMaxID();
 
-  // if valid `localStorage` 'id' use it - otherwise use the current HN ID
-  (id > 0) ? id : nowId;
+  // if `localStorage` `id` exists and is greater than zero use it.
+  // Otherwise use the current HN ID from the site.
+  id = (id > 0) ? id : nowId;
 
   // check how many new HN IDs have been missed
   const diffId = (nowId - id);
@@ -198,7 +233,8 @@ async function streamStory() {
   console.log(`Starting with Hacker News ID: '${startId}'`);
   console.log("Waiting for new HN stories... checking every 2 minutes\n");
 
-  // keep running forever
+  // keep running forever so suppress warning in Webstorm below:
+  // noinspection InfiniteLoopJS
   while (true) {
     const item = await getItemByID(id);
 
