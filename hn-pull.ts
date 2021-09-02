@@ -38,17 +38,13 @@ const baseURL = "https://hacker-news.firebaseio.com/v0";
 // UTILITY FUNCTIONS
 //--------------------------------
 
-/**
- * Type Guard for string
- */
+/** Type guard for string */
 // deno-lint-ignore no-explicit-any
 function _isString(arg: any): arg is string {
   return arg !== undefined;
 }
 
-/**
- * Type Guard for number
- */
+/** Type Guard for number */
 // deno-lint-ignore no-explicit-any
 function isNumber(arg: any): arg is number {
   return arg !== undefined;
@@ -106,12 +102,11 @@ interface Item {
   readonly parts?: number[];
 }
 
-/** Obtain the maximum Hacker News item ID
- * @description Request the newest published Hacker News item ID retrieved from the Hacker Mews API call.
+/**
+ * Request the newest published Hacker News item ID retrieved from the Hacker Mews API call.
  * @code https://hacker-news.firebaseio.com/v0/maxitem.json
- * @return number : the retrieved HN item or `-1` if unable to parse as an integer (ie NaN)
+ * @return The retrieved HN item or `-1` if unable to parse as an integer (ie NaN)
  */
-// https://hacker-news.firebaseio.com/v0/maxitem.json <- returns a number
 async function getMaxID(): Promise<number> {
   const endpoint = `${baseURL}/maxitem.json`;
   const res = await fetch(endpoint);
@@ -119,11 +114,11 @@ async function getMaxID(): Promise<number> {
   return (parseInt(item)) || -1;
 }
 
-/** Obtain Hacker News article for the given article ID
- *  @description Returns the requested Hacker News article as an `Item` for the provided HN 'ID'
+/**
+ *  Returns the requested Hacker News article as an `Item` for the provided HN 'ID'.
  *  @code https://hacker-news.firebaseio.com/v0/item/<ID>.json
- *  @param id : number - the number of the Hacker News article to request from the HN API
- *  @return Item | undefined - copy or the `Item` interface record from the HN API or `undefined`
+ *  @param id The number of the Hacker News article to request from the HN API.
+ *  @return A copy or the `Item` interface record from the HN API or `undefined` if unknown.
  */
 async function getItemByID(id: number): Promise<Item | undefined> {
   const endpoint = `${baseURL}/item/${id}.json`;
@@ -132,8 +127,10 @@ async function getItemByID(id: number): Promise<Item | undefined> {
   return item ?? undefined;
 }
 
-/** Obtain HN user info for the given user ID */
-// https://hacker-news.firebaseio.com/v0/user/<userID>.json  <- returns HN user details
+/**
+ * Obtain HN user info for the given user ID
+ * @code https://hacker-news.firebaseio.com/v0/user/<userID>.json
+ */
 async function getUserData(userID: string): Promise<string> {
   if (userID && userID !== "unknown author") {
     const endpoint = `${baseURL}/user/${userID}.json`;
@@ -147,12 +144,13 @@ async function getUserData(userID: string): Promise<string> {
   }
 }
 
-/** Store last Hacker News story ID on `localStorage`
- * @description Attempts to write the provided Hacker News item ID into `localStorage` using `Storage.setItem`.
- * @param hnID : number - Hacker News items ID to be stored against key `hnIdKey`
- * @return boolean - `true` param passed is greater than `0` and its store was attempted
- * */
-// https://deno.land/x/config_dir@v0.1.1/mod.ts  <- alternative approach
+/**
+ * Attempts to write the provided Hacker News item ID into `localStorage` using `Storage.setItem`.
+ * @param hnID Hacker News items ID to be stored against key `hnIdKey`
+ * @return When the param provided is greater than `0` and its storage was attempted then will be `true`
+ * @see If needed an alternative approach to using `localStorage` might be:
+ * @code https://deno.land/x/config_dir@v0.1.1/mod.ts
+ */
 function setLastId(hnID: number): boolean {
   if (isNumber(hnID) && hnID >= 0) {
     localStorage.setItem("hnIdKey", `${hnID}`);
@@ -164,8 +162,9 @@ function setLastId(hnID: number): boolean {
 /**
  * Check and retrieve Hacker New last seen story ID from `localStorage`
  * @returns last stored HackerNews item ID or `-1` on failure
+ * @see If needed an alternative approach to using `localStorage` might be:
+ * @code https://deno.land/x/config_dir@v0.1.1/mod.ts
  */
-// https://deno.land/x/config_dir@v0.1.1/mod.ts <- alternative approach
 function getLastId(): number {
   try {
     if (localStorage.length > 0) {
@@ -183,7 +182,7 @@ function getLastId(): number {
   return -1;
 }
 
-/** Continuously stream any new story items added to HN - check every 90 secs in a loop */
+/** Continuously stream any new story items added to HN - check every 120 secs in a loop */
 async function streamStory() {
   // check if a localStorage hnID exists from previous execution
   let id = getLastId();
