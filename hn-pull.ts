@@ -25,7 +25,6 @@
  * @todo add delay in request retrieval so not to overload HN site on long pulls
  * @todo add version and help command line params and output options
  * @todo move all `fetch` requests to one function and wrap in `try/catch`
- * @todo catch error for '--target' when compiled as not supported yet
  */
 
 // modules imported
