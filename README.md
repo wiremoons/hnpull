@@ -6,7 +6,27 @@ Deno app to monitor and pull the latest Hacker News stories.
 
 ![hn-pull.ts screenshot](images/screen1.png)
 
-The web site for [Hacker News](https://news.ycombinator.com/news).
+The official web site for [Hacker News](https://news.ycombinator.com/news) can
+also show the latest new articles published if preferred.
+
+## Main features of hnpull
+
+The program is written to run in a terminal window and check for any new Hacker
+News (HN) articles. Once a new article is found a summary is displayed. The main
+benefits are:
+
+- a clear summary of each new article published;
+- links to the HN comments and any linked article source;
+- records locally the last article retrieved so any new 'missed' ones can
+  optionally be retrieved when re-run;
+- if a large number of new articles (ie number is shown when run) has
+  accumulated - their download can be skipped by default;
+- runs forever so can constantly monitor as a background stream if needed;
+- only checks periodically so as not to overload the API site.
+- runs on _Windows_, _macOS_, _Linux_ - anywhere Deno can run.
+
+**Please use the program responsibly** — do not to overload the _Hacker News
+API_ site by running the program for no reason.
 
 ## Downloading
 
@@ -64,10 +84,10 @@ copy and add it to a directory in your path.
 
 ## Development Information
 
-The application in written using the _Deno_ runtime and the TypeScript
-programming language, so can be used on any operating systems support by Deno,
-such as Windows, Linux, macOS, etc. More information about Deno is available
-here:
+The application in written using the _Deno_ runtime and the _TypeScript_
+programming language, so can be used on any operating systems support by _Deno_,
+such as _Windows_, _Linux_, _macOS_, etc. More information about Deno is
+available here:
 
 - [Deno's web site](https://deno.land/)
 - [Deno on GitHub](https://github.com/denoland)
