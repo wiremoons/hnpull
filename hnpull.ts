@@ -28,7 +28,10 @@
  * @todo use HN colour in some output: #ff6600
  */
 
-// modules imported
+//--------------------------------
+// MODULE IMPORTS
+//--------------------------------
+
 import { delay } from "https://deno.land/std@0.106.0/async/delay.ts";
 import { format, toIMF } from "https://deno.land/std@0.106.0/datetime/mod.ts";
 import { isNumber } from "https://raw.githubusercontent.com/wiremoons/deno_mod/0.3.0/mod.ts";
