@@ -31,6 +31,7 @@
 // modules imported
 import { delay } from "https://deno.land/std@0.106.0/async/delay.ts";
 import { format, toIMF } from "https://deno.land/std@0.106.0/datetime/mod.ts";
+import { isNumber } from "https://raw.githubusercontent.com/wiremoons/deno_mod/0.3.0/mod.ts";
 
 /** Base URL for all calls to the Hacker News API */
 const baseURL = "https://hacker-news.firebaseio.com/v0";
@@ -38,18 +39,6 @@ const baseURL = "https://hacker-news.firebaseio.com/v0";
 //--------------------------------
 // UTILITY FUNCTIONS
 //--------------------------------
-
-/** Type guard for string */
-// deno-lint-ignore no-explicit-any
-function _isString(arg: any): arg is string {
-  return arg !== undefined;
-}
-
-/** Type Guard for number */
-// deno-lint-ignore no-explicit-any
-function isNumber(arg: any): arg is number {
-  return arg !== undefined;
-}
 
 /** Convert epoch date to date and time for display in output as a string */
 function getDisplayDateTime(epochTime: number): string {
