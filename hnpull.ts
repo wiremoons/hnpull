@@ -1,11 +1,11 @@
 #!/usr/bin/env -S deno run --quiet --allow-net=hacker-news.firebaseio.com --location https://wiremoons.com/
 /**
- * @file hn-pull.ts
+ * @file hnpull.ts
  * @brief Monitor and pull the latest Hacker News stories.
  *
  * @author     simon rowe <simon@wiremoons.com>
  * @license    open-source released under "MIT License"
- * @source     https://github.com/wiremoons/hn-pull
+ * @source     https://github.com/wiremoons/hnpull
  *
  * @date originally created: 24 Aug 2021
  * @date updated significantly: 31 Aug 2021
@@ -15,7 +15,7 @@
  * Application is written in TypeScript for use with the Deno runtime: https://deno.land/
  *
  * @note The program can be run with Deno using the command:
- * @code deno run --quiet --allow-net=hacker-news.firebaseio.com --location https://wiremoons.com/ ./hn-pull.ts
+ * @code deno run --quiet --allow-net=hacker-news.firebaseio.com --location https://wiremoons.com/ ./hnpull.ts
  */
 
 /**
