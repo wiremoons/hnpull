@@ -34,7 +34,7 @@
 
 import { delay } from "https://deno.land/std@0.106.0/async/delay.ts";
 import { format, toIMF } from "https://deno.land/std@0.106.0/datetime/mod.ts";
-import { isNumber } from "https://raw.githubusercontent.com/wiremoons/deno_mod/0.5.0/mod.ts";
+import { isNumber } from "https://deno.land/x/deno_mod@0.6.1/mod.ts";
 
 /** Base URL for all calls to the Hacker News API */
 const baseURL = "https://hacker-news.firebaseio.com/v0";
