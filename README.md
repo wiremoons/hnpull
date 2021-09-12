@@ -1,4 +1,7 @@
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/hyperium/hyper/master/LICENSE)
+[![tag](https://img.shields.io/github/v/release/wiremoons/hnpull.svg)](https://github.com/wiremoons/hnpull/releases)
+[![](https://img.shields.io/badge/deno-v1.13.2-green.svg)](https://github.com/denoland/deno)
+
 
 # hnpull
 
