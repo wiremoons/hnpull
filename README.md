@@ -2,7 +2,6 @@
 [![tag](https://img.shields.io/github/v/release/wiremoons/hnpull.svg)](https://github.com/wiremoons/hnpull/releases)
 [![](https://img.shields.io/badge/deno-v1.13.2-green.svg)](https://github.com/denoland/deno)
 
-
 # hnpull
 
 Deno app to monitor and pull the latest Hacker News stories.
@@ -62,7 +61,7 @@ chmod 755 hnpull.ts
 The program can be run with _Deno_ using the command:
 
 ```console
-deno run --quiet --allow-net=hacker-news.firebaseio.com --location https://wiremoons.com/ ./hn-pull.ts
+deno run --quiet --allow-net=hacker-news.firebaseio.com --location https://wiremoons.com/ ./hnpull.ts
 ```
 
 NOTE: the ability to compile the program is not possible due to
@@ -70,7 +69,7 @@ NOTE: the ability to compile the program is not possible due to
 fixed, the program can be compiled with _Deno_ using the command:
 
 ```console
-deno compile --quiet --allow-net=hacker-news.firebaseio.com --location https://wiremoons.com/ ./hn-pull.ts
+deno compile --quiet --allow-net=hacker-news.firebaseio.com --location https://wiremoons.com/ ./hnpull.ts
 ```
 
 ### Installing Deno
