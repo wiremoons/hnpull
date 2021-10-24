@@ -21,7 +21,7 @@
 /**
  * @note The following application enhancements are anticipated:
  * @todo offload output to a Worker?
- * @todo different output options:  text with colour / JSON / into SQlite / HTML
+ * @todo different output options:  text with colour / JSON / into SQLite / HTML
  * @todo add delay in request retrieval so not to overload HN site on long pulls
  * @todo add version and help command line params and output options
  * @todo move all `fetch` requests to one function and wrap in `try/catch`
@@ -32,9 +32,9 @@
 // MODULE IMPORTS
 //--------------------------------
 
-import { delay } from "https://deno.land/std@0.106.0/async/delay.ts";
-import { format, toIMF } from "https://deno.land/std@0.106.0/datetime/mod.ts";
-import { isNumber } from "https://deno.land/x/deno_mod@0.6.1/mod.ts";
+import { delay } from "https://deno.land/std@0.112.0/async/delay.ts";
+import { format, toIMF } from "https://deno.land/std@0.112.0/datetime/mod.ts";
+import { isNumber } from "https://deno.land/x/deno_mod@0.7.0/mod.ts";
 
 /** Base URL for all calls to the Hacker News API */
 const baseURL = "https://hacker-news.firebaseio.com/v0";
