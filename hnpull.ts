@@ -35,7 +35,7 @@
 import { delay } from "https://deno.land/std@0.127.0/async/delay.ts";
 import { format, toIMF } from "https://deno.land/std@0.127.0/datetime/mod.ts";
 import { isNumber } from "https://deno.land/x/deno_mod@0.7.4/mod.ts";
-import { bold } from "https://deno.land/std@0.127.0/fmt/colors.ts";
+import { bold,underline } from "https://deno.land/std@0.127.0/fmt/colors.ts";
 
 /** Base URL for all calls to the Hacker News API */
 const baseURL = "https://hacker-news.firebaseio.com/v0";
@@ -266,8 +266,8 @@ async function streamStory() {
       // print the story data to screen
       console.log(`
       Title:      '${bold(item.title || "NONE")}'
-      HN link:     ${hnURL}
-      Story URL:   ${item.url || "NONE"}
+      HN link:     ${underline(hnURL)}
+      Story URL:   ${underline(item.url || "NONE")}
       Posted by:  '${author}' ${await getUserData(author)}
       Posted on:   ${getDisplayDateTime(item.time ?? Date.now())}.
       Exec stats: '${storyId}' displayed. '${skippedId}' omitted . '${id -
