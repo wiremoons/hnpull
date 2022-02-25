@@ -32,9 +32,9 @@
 // MODULE IMPORTS
 //--------------------------------
 
-import { delay } from "https://deno.land/std@0.112.0/async/delay.ts";
-import { format, toIMF } from "https://deno.land/std@0.112.0/datetime/mod.ts";
-import { isNumber } from "https://deno.land/x/deno_mod@0.7.0/mod.ts";
+import { delay } from "https://deno.land/std@0.127.0/async/delay.ts";
+import { format, toIMF } from "https://deno.land/std@0.127.0/datetime/mod.ts";
+import { isNumber } from "https://deno.land/x/deno_mod@0.7.4/mod.ts";
 
 /** Base URL for all calls to the Hacker News API */
 const baseURL = "https://hacker-news.firebaseio.com/v0";
