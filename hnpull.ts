@@ -1,4 +1,4 @@
-#!/usr/bin/env -S deno run --quiet --allow-net=hacker-news.firebaseio.com --location https://wiremoons.com/
+#!/usr/bin/env -S deno run --quiet --allow-read --allow-net=hacker-news.firebaseio.com --location https://wiremoons.com/
 /**
  * @file hnpull.ts
  * @brief Monitor and pull the latest Hacker News stories.
@@ -15,7 +15,7 @@
  * Application is written in TypeScript for use with the Deno runtime: https://deno.land/
  *
  * @note The program can be run with Deno using the command:
- * @code deno run --quiet --allow-net=hacker-news.firebaseio.com --location https://wiremoons.com/ ./hnpull.ts
+ * @code deno run --quiet --allow-read --allow-net=hacker-news.firebaseio.com --location https://wiremoons.com/ ./hnpull.ts
  */
 
 /**
@@ -32,10 +32,13 @@
 // MODULE IMPORTS
 //--------------------------------
 
-import { delay } from "https://deno.land/std@0.127.0/async/delay.ts";
-import { format, toIMF } from "https://deno.land/std@0.127.0/datetime/mod.ts";
-import { isNumber } from "https://deno.land/x/deno_mod@0.7.4/mod.ts";
-import { bold,underline } from "https://deno.land/std@0.127.0/fmt/colors.ts";
+import {delay} from "https://deno.land/std@0.127.0/async/delay.ts";
+import {format, toIMF} from "https://deno.land/std@0.127.0/datetime/mod.ts";
+import {isNumber} from "https://deno.land/x/deno_mod@0.7.4/mod.ts";
+import {bold,underline,green} from "https://deno.land/std@0.127.0/fmt/colors.ts";
+import {basename} from "https://deno.land/std@0.127.0/path/mod.ts";
+import {parse} from "https://deno.land/std@0.127.0/flags/mod.ts";
+import {cliVersion} from "https://deno.land/x/deno_mod@0.7.5/cli_version.ts";
 
 /** Base URL for all calls to the Hacker News API */
 const baseURL = "https://hacker-news.firebaseio.com/v0";
@@ -43,6 +46,11 @@ const baseURL = "https://hacker-news.firebaseio.com/v0";
 //--------------------------------
 // UTILITY FUNCTIONS
 //--------------------------------
+
+/** Return the name of the currently running program without the path included. */
+function getAppName(): string {
+  return `${basename(Deno.mainModule) ?? "UNKNOWN"}`;
+}
 
 /** Convert epoch date to date and time for display in output as a string */
 function getDisplayDateTime(epochTime: number): string {
@@ -70,6 +78,67 @@ function getDisplayDate(epochTime: number): string {
   } else {
     return "UNKNOWN";
   }
+}
+
+//--------------------------------
+// COMMAND LINE ARGS FUNCTIONS
+//--------------------------------
+
+/** Define the command line argument switches and options to be used */
+const cliOpts = {
+  default: { h: false, v: false },
+  alias: { h: "help", v: "version" },
+  stopEarly: true,
+  unknown: showUnknown,
+};
+
+/** define options for `cliVersion()` function for application version data */
+const versionOptions = {
+  version: "0.6.0",
+  copyrightName: "Simon Rowe",
+  licenseUrl: "https://github.com/wiremoons/hnpull/",
+  crYear: "2022",
+};
+
+/** obtain any command line arguments and exec them as needed */
+async function getCliArgs() {
+  //console.log(parse(Deno.args,cliOpts));
+  const cliArgs = parse(Deno.args, cliOpts);
+
+  if (cliArgs.help) {
+    showHelp();
+    Deno.exit(0);
+  }
+
+  if (cliArgs.version) {
+    const versionData = await cliVersion(versionOptions);
+    console.log(versionData);
+    Deno.exit(0);
+  }
+}
+
+/** Function defined in `cliOpts` so is run automatically by `parse()` if an unknown
+ * command line option is given by the user.
+ * @code showUnknown(arg: string, k?: string, v?: unknown)
+ */
+function showUnknown(arg: string) {
+  console.error(`\nERROR: Unknown argument: '${arg}'`);
+  showHelp();
+  Deno.exit(1);
+}
+
+/** Help display for application called when unknown command lines options are entered */
+function showHelp() {
+  console.log(`  
+'${bold(getAppName())}' monitor and pull the latest Hacker News stories using the API 
+from: https://github.com/HackerNews/API
+
+Usage: ${getAppName()} [switches] [arguments]
+
+[Switches]       [Arguments]   [Default Value]   [Description]
+-h, --help                          false        display help information  
+-v, --version                       false        display program version
+`);
 }
 
 //--------------------------------
@@ -178,6 +247,8 @@ function getLastId(): number {
 
 /** Continuously stream any new story items added to HN - check every 120 secs in a loop */
 async function streamStory() {
+  //
+  console.log(`\nRunning '${getAppName()}' —> use '${green("ctrl + c")}' to exit.\n`)
   // check if a localStorage hnID exists from previous execution
   let id = getLastId();
   console.log(`Retrieved localStorage HN ID: ${id}`);
@@ -286,5 +357,8 @@ async function streamStory() {
 // MAIN
 //--------------------------------
 if (import.meta.main) {
+  // check for any command line arguments from the user
+  if (Deno.args.length > 0) await getCliArgs();
+  // run application
   await streamStory();
 }
