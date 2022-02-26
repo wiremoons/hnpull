@@ -1,6 +1,6 @@
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/hyperium/hyper/master/LICENSE)
 [![tag](https://img.shields.io/github/v/release/wiremoons/hnpull.svg)](https://github.com/wiremoons/hnpull/releases)
-[![](https://img.shields.io/badge/deno-v1.13.2-green.svg)](https://github.com/denoland/deno)
+[![](https://img.shields.io/badge/deno-v1.19.1-green.svg)](https://github.com/denoland/deno)
 
 # hnpull
 
@@ -26,6 +26,7 @@ benefits are:
 - runs forever so can constantly monitor as a background stream if needed;
 - only checks periodically so as not to overload the API site.
 - runs on _Windows_, _macOS_, _Linux_ - anywhere Deno can run.
+- includes help and version information (see CLI options: '-h' and '-v')
 
 **Please use the program responsibly** — do not to overload the _Hacker News
 API_ site by running the program for no reason.
@@ -61,7 +62,7 @@ chmod 755 hnpull.ts
 The program can be run with _Deno_ using the command:
 
 ```console
-deno run --quiet --allow-net=hacker-news.firebaseio.com --location https://wiremoons.com/ ./hnpull.ts
+deno run --quiet --allow-read --allow-net=hacker-news.firebaseio.com --location https://wiremoons.com/ ./hnpull.ts
 ```
 
 NOTE: the ability to compile the program is not possible due to
@@ -69,7 +70,7 @@ NOTE: the ability to compile the program is not possible due to
 fixed, the program can be compiled with _Deno_ using the command:
 
 ```console
-deno compile --quiet --allow-net=hacker-news.firebaseio.com --location https://wiremoons.com/ ./hnpull.ts
+deno compile --quiet --allow-read --allow-net=hacker-news.firebaseio.com --location https://wiremoons.com/ ./hnpull.ts
 ```
 
 ### Installing Deno
